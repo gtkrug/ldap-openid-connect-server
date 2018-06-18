@@ -36,7 +36,7 @@ public class LdapUserInfoRepository implements UserInfoRepository {
 
 	private LdapTemplate ldapTemplate;
 	
-	private String emailSuffix = "@example.com";
+	private String emailSuffix = "@nief.org";
 	
 	public LdapTemplate getLdapTemplate() {
 		return ldapTemplate;
@@ -70,8 +70,8 @@ public class LdapUserInfoRepository implements UserInfoRepository {
 			// add in the optional fields
 			
 			// email address
-			if (attr.get("mail") != null) {
-				ui.setEmail(attr.get("mail").get().toString());
+			if (attr.get("email") != null) {
+				ui.setEmail(attr.get("email").get().toString());
 				// if this domain also provisions email addresses, this should be set to true
 				ui.setEmailVerified(false);
 			}
@@ -88,8 +88,8 @@ public class LdapUserInfoRepository implements UserInfoRepository {
 				ui.setName(attr.get("displayName").get().toString());
 			}
 			
-			if (attr.get("givenName") != null) {
-				ui.setGivenName(attr.get("givenName").get().toString());
+			if (attr.get("cn") != null) {
+				ui.setGivenName(attr.get("cn").get().toString());
 			}
 			
 			if (attr.get("sn") != null) {
@@ -99,6 +99,17 @@ public class LdapUserInfoRepository implements UserInfoRepository {
 			if (attr.get("initials") != null) {
 				ui.setMiddleName(attr.get("initials").get().toString());
 			}
+
+                        // NIEF attributes (set with temporary default values)
+                        ui.setNiefLeo (false);
+                        ui.setNief28CFR (false);
+                        ui.setNiefPso (true);
+                        ui.setNiefOri ("GA01234567");
+                        ui.setNiefAal ("AAL1");
+                        ui.setNiefIal ("IAL1");
+                        ui.setNiefFedId (attr.get("email").get().toString());
+                        ui.setNiefIdpId ("NIEF:IDP:TestIdp");
+
 
 			return ui;
 			

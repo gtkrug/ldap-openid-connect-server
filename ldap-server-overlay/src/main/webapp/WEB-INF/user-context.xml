@@ -43,7 +43,7 @@
 	
 	<!-- LDAP -->
 	
-	<security:ldap-server url="${ldap.server}" />
+	<security:ldap-server url="ldap://localhost:389/" />
 	
 	<bean id="ldapAuthProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
 		<constructor-arg>
@@ -61,6 +61,7 @@
 				<property name="admins">
 					<set>
 						<!-- list admin usernames here -->
+						<value>jkrug</value>
 					</set>
 				</property>
 			</bean>
@@ -68,8 +69,8 @@
 	</bean>	
 		
 	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
-		<property name="url" value="${ldap.url}" />
-		<property name="base" value="${ldap.base}" />
+		<property name="url" value="ldap://localhost:389/" />
+		<property name="base" value="ou=users,dc=nief,dc=org" />
 	</bean>
 
 	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
