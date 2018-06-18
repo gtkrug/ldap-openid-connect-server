@@ -1,1 +1,8 @@
 This is a version of the MITREid Connect server that speaks to a backend LDAP system for its user information and authentication.
+
+  - Additionally it supports a new scope of 'nief'.
+  - The nief scope includes a new set of claims aligned with the NIEF attribute registry.
+  - Currently these new attribute values are not sourced from LDAP, their values are hard coded.
+  - Sourcing them from the LDAP would not be hard to add, but would is not being done at this point.
+
+
