@@ -22,6 +22,11 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.mit.kit.userdetails.MappedFileAttributes;
+
 /**
  * Looks up the user information from an LDAP template and maps the results
  * into a UserInfo object. This object is then cached.
@@ -34,9 +39,12 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 
 public class LdapUserInfoRepository implements UserInfoRepository {
 
+        private static final Logger log = LoggerFactory.getLogger(LdapUserInfoRepository.class);
+
 	private LdapTemplate ldapTemplate;
 	
 	private String emailSuffix = "@nief.org";
+        private String pathUserFiles = "/opt/idp/users/";
 	
 	public LdapTemplate getLdapTemplate() {
 		return ldapTemplate;
@@ -57,6 +65,8 @@ public class LdapUserInfoRepository implements UserInfoRepository {
 			if (attr.get("uid") == null) {
 				return null; // we can't go on if there's no UID to look up
 			}
+
+                        MappedFileAttributes fileAttrs = new MappedFileAttributes (pathUserFiles + attr.get("uid").get().toString() + ".attr");                       
 			
 			UserInfo ui = new DefaultUserInfo();
 			
@@ -101,7 +111,10 @@ public class LdapUserInfoRepository implements UserInfoRepository {
 			}
 
                         // NIEF attributes (set with temporary default values)
-                        ui.setNiefLeo (false);
+                        if (fileAttrs.get("leo") != null) {
+                             ui.setNiefLeo (fileAttrs.get("leo").matches("true"));
+                        }
+
                         ui.setNief28CFR (false);
                         ui.setNiefPso (true);
                         ui.setNiefOri ("GA01234567");
